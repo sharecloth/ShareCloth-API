@@ -11,14 +11,22 @@
  */
 class ShareClothApi {
 
+    /** @var string */
+    private $_error;
+
+    /** @var string */
     protected $_apiPath = 'http://api.sharecloth.com/v1/';
 
+    /** @var string Client ID */
     protected $_clientId;
 
+    /** @var string Secret Key */
     protected $_secret;
 
+    /** @var string Path to pattern file */
     protected $_patternFile;
 
+    /** @var array Array of sketches */
     protected $_sketchFiles;
 
     /**
@@ -104,6 +112,8 @@ class ShareClothApi {
      * @return mixed
      */
     protected function _createRequest($url, $params, $files = null) {
+        $this->_error = false;
+
         if (!empty($files)) {
             foreach ($files as $fileName => $file) {
                 if (is_array($file)) {
@@ -121,11 +131,47 @@ class ShareClothApi {
         curl_setopt($ch, CURLOPT_URL, $url);
         curl_setopt($ch, CURLOPT_POST, 1);
         curl_setopt($ch, CURLOPT_POSTFIELDS, $params);
+        curl_setopt($ch, CURLOPT_RETURNTRANSFER, true);
 
-        $result = curl_exec($ch);
-        curl_close ($ch);
+        if (!$result = curl_exec($ch)) {
+            $this->_error = curl_error($ch);
+            return false;
+        }
 
-        return $result;
+        curl_close($ch);
+
+        return $this->_parseResult($result);
+    }
+
+    /**
+     * @return string
+     */
+    public function getError() {
+        return $this->_error;
+    }
+
+    /**
+     * @param $result
+     * @return array|bool
+     */
+    protected function _parseResult($result) {
+        if (empty($result)) {
+            $this->_error = 'Result is empty';
+            return false;
+        }
+
+        $result = @json_decode($result, true);
+        if (empty($result)) {
+            $this->_error = 'Result is empty';
+            return false;
+        }
+
+        if ($result['status'] == 'error') {
+            $this->_error = $result['data'];
+            return false;
+        }
+
+        return $result['data'];
     }
 
     /**
