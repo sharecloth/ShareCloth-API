@@ -258,4 +258,14 @@ class ShareClothApi {
         return $this->_createRequest($this->_apiPath . 'options/sizes', $params);
     }
 
+    /**
+     * @param int $id Cloth ID
+     * @return array|bool
+     */
+    public function getStatus($id) {
+        $params = $this->_createParams();
+        $params['id'] = $id;
+        return $this->_createRequest($this->_apiPath . 'product/status', $params);
+    }
+
 }
