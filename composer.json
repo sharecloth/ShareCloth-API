@@ -1,5 +1,5 @@
 {
-  "name": "sharecloth/api-demo",
+  "name": "sharecloth/api",
   "description": "Sharecloth API Demonstration",
   "autoload": {
     "psr-4": {
