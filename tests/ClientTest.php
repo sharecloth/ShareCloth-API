@@ -46,4 +46,31 @@ class ClientTest extends PHPUnit_Framework_TestCase
         $this->assertArrayHasKey('name', $items[0]);
         $this->assertArrayHasKey('link', $items[0]);
     }
+
+    public function testAvatarCreateUpdate()
+    {
+        $options = [
+            'gender' => 'male',
+            'HIPS' => '60',
+            'avatar_name' => 'Avatar Name',
+            'WAIST' => '60',
+            'HEIGHT' => '160',
+            'NECK_CIRCLE' => '30',
+            'hair_id' => 0,
+            'hair_style' => 'PerlHair',
+            'eye_id' => 1,
+        ];
+
+        $result = $this->_client->avatarCreate($options);
+
+        $this->assertInternalType('array', $result);
+        $this->assertArrayHasKey('avatar_id', $result);
+
+        $options['id'] = $result['avatar_id'];
+
+        $result = $this->_client->avatarUpdate($options);
+        $this->assertInternalType('array', $result);
+        $this->assertArrayHasKey('avatar_id', $result);
+    }
+
 }

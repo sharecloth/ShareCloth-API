@@ -23,6 +23,9 @@ class Client implements ClientInterface
     /** @var string */
     protected $baseUri = 'http://api.sharecloth.com/v1/';
 
+    /** @var  integer */
+    protected $timeout = 300;
+
     /**
      * Client constructor.
      * @param $email
@@ -61,8 +64,7 @@ class Client implements ClientInterface
      */
     public function itemsList($options)
     {
-        $response = $this->makeRequest('items/list', $options);
-        return $response->getData();
+        return $this->runApiMethod('items/list', $options);
     }
 
     /**
@@ -72,9 +74,43 @@ class Client implements ClientInterface
      */
     public function avatarList($options = [])
     {
-        $response = $this->makeRequest('avatar/list', $options);
+        return $this->runApiMethod('avatar/list', $options);
+    }
+
+    /**
+     * @param array $options
+     * @return mixed
+     * @throws BadResponseException
+     */
+    public function avatarCreate($options = [])
+    {
+        return $this->runApiMethod('avatar/create', $options);
+    }
+
+    /**
+     * @param array $options
+     * @return mixed
+     * @throws BadResponseException
+     */
+    public function avatarUpdate($options = [])
+    {
+        return $this->runApiMethod('avatar/update', $options);
+    }
+
+    /**
+     * Basic method for all api calls
+     * @param $method
+     * @param array $options
+     * @return mixed
+     * @throws BadResponseException
+     */
+    protected function runApiMethod($method, $options = [])
+    {
+        $response = $this->makeRequest($method, $options);
         return $response->getData();
     }
+
+
 
     /**
      * @param $uri
@@ -103,7 +139,8 @@ class Client implements ClientInterface
     protected function initHttpClient($httpClientConfig)
     {
         $config = array_merge([
-            'base_uri' => $this->baseUri
+            'base_uri' => $this->baseUri,
+            'timeout' => $this->timeout,
         ], $httpClientConfig);
 
         $this->httpClient = new \GuzzleHttp\Client($config);
