@@ -127,7 +127,12 @@ class Client implements ClientInterface
 
         $response = $this->httpClient->request($method, $uri, ['form_params' => $options]);
         if ($response->getStatusCode() == 200) {
-            return $this->parseResponse($response);
+            $parsed =  $this->parseResponse($response);
+            if (! $parsed->isResponseSuccess() ) {
+                throw new BadResponseException($parsed->getErrorMessage());
+            }
+
+            return $parsed;
         }
 
         throw new BadResponseException($response->getStatusCode());

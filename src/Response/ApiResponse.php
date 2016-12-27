@@ -11,6 +11,17 @@ namespace ShareCloth\Api\Response;
 class ApiResponse
 {
 
+    /**
+     *
+     */
+    const STATUS_SUCCESS = 'success';
+
+    /**
+     *
+     */
+    const STATUS_ERROR = 'error';
+
+
     private $_status;
 
     private $_data;
@@ -47,10 +58,18 @@ class ApiResponse
         $this->_data = $data;
     }
 
+    /**
+     * @return string|null
+     */
+    public function getErrorMessage()
+    {
+        return $this->getDataItem('message');
+    }
+
 
     public function isResponseSuccess()
     {
-        return $this->_status === 'success';
+        return $this->_status === self::STATUS_SUCCESS;
     }
 
 
