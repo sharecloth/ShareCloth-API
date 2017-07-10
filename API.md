@@ -367,7 +367,83 @@ API могут пользоваться только пользователи, �
 
 ### Создание аватаров из уже подготовленных файлов
 
+```
+[POST] /avatar/upload
+```
 
+Параметры:
+
+- avatar_name - Имя аватара (сейчас нигде не используется)
+- mesh - zip архив с аватаром
+- texture - zip архив с текстурой (не обязательный)
+- texture_id - ID существующей текстуры (не обязательный)
+
+Обязательным условием является наличия одного поля, либо texture либо texture_id.
+
+Ответ содержит следующие поля:
+
+- avatar_id - id аватара
+- texture_id - id текстуры
+
+
+Пример ответа:
+
+```json
+{
+    "status": "success",
+    "method": "/v1/avatar/upload",
+    "data": {
+        "avatar_id": 350,
+        "avatar_ident": 170
+    }
+}
+```
+
+
+### Получение списка аватаров
+
+```
+[GET] /avatar/list
+```
+
+Пример ответа:
+
+```json
+{
+    "status": "success",
+    "method": "/v1/avatar/list",
+    "data": [
+        {
+            "avatar_id": 21,
+            "description": "Standard avatar 1"
+        },
+        {
+            "avatar_id": 22,
+            "description": "Standard avatar 2"
+        },
+        {
+            "avatar_id": 23,
+            "description": "Standard avatar 3"
+        },
+        {
+            "avatar_id": 24,
+            "description": "Standard avatar 4"
+        },
+        {
+            "avatar_id": 25,
+            "description": "Standard avatar 5"
+        },
+        {
+            "avatar_id": 26,
+            "description": "Standard avatar 6"
+        },
+        {
+            "avatar_id": 1,
+            "description": "Collection Name - Test size 1"
+        }
+    ]
+}
+```
 
 
 
