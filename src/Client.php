@@ -28,27 +28,14 @@ class Client implements ClientInterface
 
     /**
      * Client constructor.
-     * @param $email
-     * @param $password
+     * @param $apiSecret
      * @param array $httpClientConfig
      *
-     * @throws BadResponseException
      */
-    public function __construct($email, $password, $httpClientConfig = [])
+    public function __construct($apiSecret, $httpClientConfig = [])
     {
         $this->initHttpClient($httpClientConfig);
-        $response = $this->makeRequest('user/login', [
-            'email' => $email,
-            'password' => $password
-        ]);
-
-
-        if ($response->isResponseSuccess()) {
-            $this->apiSecret = $response->getDataItem('api_secret');
-            $this->client = $response->getDataItem('id');
-        } else {
-            throw  new BadResponseException($response->getDataItem('message'));
-        }
+        $this->apiSecret = $apiSecret;
     }
 
 
@@ -75,6 +62,66 @@ class Client implements ClientInterface
     public function avatarList($options = [])
     {
         return $this->runApiMethod('avatar/list', $options);
+    }
+
+    /**
+     * @return ApiResponse
+     * @throws BadResponseException
+     */
+    public function optionsCollection()
+    {
+        return $this->runApiMethod('options/collections');
+    }
+
+    /**
+     * @param $options
+     * @return ApiResponse
+     * @throws BadResponseException
+     */
+    public function optionsCollectionSizes($options)
+    {
+        return $this->runApiMethod('options/collection_sizes', $options);
+    }
+
+    /**
+     * @param $options
+     * @return ApiResponse
+     * @throws BadResponseException
+     */
+    public function optionsAddSizingCollection($options)
+    {
+        return $this->runApiMethod('options/add-sizing-collection', $options);
+
+    }
+
+    /**
+     * @return ApiResponse
+     * @throws BadResponseException
+     */
+    public function optionTypes()
+    {
+        return $this->runApiMethod('options/types');
+    }
+
+    /**
+     * @param $options
+     * @return array
+     * @throws BadResponseException
+     */
+    public function optionsAddCollection($options)
+    {
+        return $this->runApiMethod('options/add-collection', $options);
+    }
+
+
+    /**
+     * @param $options
+     * @return array
+     * @throws BadResponseException
+     */
+    public function optionsSizes($options)
+    {
+        return $this->runApiMethod('options/sizes', $options);
     }
 
     /**
@@ -121,8 +168,8 @@ class Client implements ClientInterface
      */
     protected function makeRequest($uri, $options, $method = 'POST')
     {
-        if ($this->client && $this->apiSecret) {
-            $options = array_merge($options, $this->generateAuthData());
+        if ($this->apiSecret) {
+            $options = array_merge($options, ['api_secret' => $this->apiSecret]);
         }
 
         $response = $this->httpClient->request($method, $uri, ['form_params' => $options]);
@@ -151,22 +198,16 @@ class Client implements ClientInterface
         $this->httpClient = new \GuzzleHttp\Client($config);
     }
 
+    /**
+     * Parse response from API and returns response object
+     * @param Response $response
+     * @return ApiResponse
+     */
     protected function parseResponse(Response $response)
     {
         $data = $response->getBody()->getContents();
         $factory = new JsonResponseFactory();
         return $factory->getApiResponse($data);
-    }
-
-    protected function generateAuthData()
-    {
-        $time = time();
-
-        return [
-            'client' => $this->client,
-            'time' => $time,
-            'sign' => md5($this->client . $this->apiSecret . $time )
-        ];
     }
 
 

@@ -11,9 +11,9 @@ namespace ShareCloth\Api;
 
 interface ClientInterface
 {
-    public function __construct($email, $password, $httpClientConfig = []);
+    public function __construct($apiSecret, $httpClientConfig = []);
 
-    public function getApisecret();
+    public function getApiSecret();
 
     public function itemsList($options);
 
