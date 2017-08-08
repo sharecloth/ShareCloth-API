@@ -118,6 +118,26 @@ class ClientTest extends PHPUnit_Framework_TestCase
         $this->assertInternalType('array', $items['items']);
     }
 
+    public function testProductUpload()
+    {
+        $file = __DIR__ . '/files/archive.zip';
+
+        $result = $this->_client->productUpload([
+            'model_name' => 'From unit tests',
+            'description' => 'Desrription',
+            'comment' => 'comment',
+            'cloth_type' => 0,
+            'without_size' => 1,
+            'subscriptions' => 'petun912@gmail.com',
+        ], $file, null, $file, $file, $file);
+
+        $this->assertArrayHasKey('id', $result);
+        $this->assertArrayHasKey('ident', $result);
+        $this->assertArrayHasKey('url', $result);
+        $this->assertArrayHasKey('curve_id', $result);
+        $this->assertArrayHasKey('texture_id', $result);
+    }
+
 //    public function testAvatarCreateUpdate()
 //    {
 //        $options = [
