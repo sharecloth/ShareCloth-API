@@ -1,4 +1,5 @@
 <?php
+
 use ShareCloth\Api\Client;
 
 /**
@@ -137,6 +138,33 @@ class ClientTest extends PHPUnit_Framework_TestCase
         $this->assertArrayHasKey('curve_id', $result);
         $this->assertArrayHasKey('texture_id', $result);
     }
+
+    public function testProductUpdateTexture()
+    {
+        $file = __DIR__ . '/files/archive.zip';
+
+        $result = $this->_client->productUpdateTexture(351, $file);
+
+         $this->assertArrayHasKey('id', $result);
+         $this->assertArrayHasKey('ident', $result);
+         $this->assertArrayHasKey('name', $result);
+         $this->assertArrayHasKey('curve_id', $result);
+         $this->assertArrayHasKey('texture_id', $result);
+    }
+
+    public function testProductUpdatePattern()
+    {
+        $file = __DIR__ . '/files/archive.zip';
+
+        $result = $this->_client->productUpdatePattern(351, $file);
+
+        $this->assertArrayHasKey('id', $result);
+        $this->assertArrayHasKey('user_id', $result);
+        $this->assertArrayHasKey('updated_pattern', $result);
+        $this->assertArrayHasKey('updated_texture', $result);
+    }
+
+
 
 //    public function testAvatarCreateUpdate()
 //    {

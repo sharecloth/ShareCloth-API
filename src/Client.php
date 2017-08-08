@@ -39,6 +39,9 @@ class Client implements ClientInterface
     }
 
 
+    /**
+     * @return string
+     */
     public function getApiSecret()
     {
         return $this->apiSecret;
@@ -208,6 +211,55 @@ class Client implements ClientInterface
 
 
         return $this->runApiMethod('product/upload', [], 'POST', $data);
+    }
+
+
+    /**
+     * @param $id
+     * @param $texture
+     * @return mixed
+     * @throws \Exception
+     */
+    public function productUpdateTexture($id, $texture)
+    {
+        if (!file_exists($texture)) {
+            throw new \Exception('File not exists');
+        }
+
+        return $this->runApiMethod('product/update-texture', [], 'POST', [
+            [
+                'name' => 'id',
+                'contents' => $id,
+            ],
+            [
+                'name' => 'texture',
+                'contents' => fopen($texture, 'r')
+            ]
+        ]);
+    }
+
+    /**
+     * @param $id
+     * @param $pattern
+     * @return mixed
+     * @throws \Exception
+     */
+    public function productUpdatePattern($id, $pattern)
+    {
+        if (!file_exists($pattern)) {
+            throw new \Exception('File not exists');
+        }
+
+        return $this->runApiMethod('product/update-pattern', [], 'POST', [
+            [
+                'name' => 'id',
+                'contents' => $id,
+            ],
+            [
+                'name' => 'pattern_file',
+                'contents' => fopen($pattern, 'r')
+            ]
+        ]);
     }
 
     /**
