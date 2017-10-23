@@ -1,6 +1,6 @@
 # ShareCloth-API PHP Client
 
-## Устновка
+## Установка
 
 Прописать в composer.json:
 
