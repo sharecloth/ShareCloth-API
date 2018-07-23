@@ -3,7 +3,7 @@
 - [Authorization and authentication](#Authorization-and-authentication)
 - [Methods description](#Methods-description)
   - [Products list](#Products-list)
-  - [Get avatar list](#Get-avatar-list)
+  - [Avatar list](#Avatar-list)
 
 
 ## Authorization and authentication
@@ -80,7 +80,7 @@ Each request must be accompanied by `api_secret` as request param.
 }
 ```
 
-### Get avatar list
+### Avatar list
 
 ```
 [GET] /avatar/list
