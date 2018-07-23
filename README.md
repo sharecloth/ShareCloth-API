@@ -1,8 +1,14 @@
 # ShareCloth-API PHP Client
 
-## Установка
+[API Documentation](API.md) 
 
-Прописать в composer.json:
+[Get access token](http://app.sharecloth.com/en/account/api-page)
+
+## Install
+
+### With composer. 
+
+Add this lines to your `composer.json` file:
 
 ```json
 "repositories": [
@@ -16,15 +22,15 @@
 }
 ```
 
-Далее выполнить
+And then
 
 `composer update`
 
 
-## Пример работы с API
+## Work with api
 
 ```php
-$accessToken = ''; // insert your access token here
+$accessToken = ''; // insert your access token here. can by found at this page: http://app.sharecloth.com/en/account/api-page
 
 $client = new Client($accessToken);
 
